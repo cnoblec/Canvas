@@ -26,7 +26,70 @@ canvas
 // Draw the axes
 canvas.drawAxes()
 
+canvas.translate(byX: 0, byY: 200)
+
+
 // Add code below...
+
+let axiom = "F++F++F"
+let rule = "F-F++F-F"
+
+var angle = 60
+
+var count = 0
+
+var length = 300
+
+func plus(number: Int)
+{
+    angle = 60 * number
+    canvas.rotate(by: Degrees(angle))
+}
+
+func newWord()
+{
+    length /= 3
+    line()
+    minus(number: 1)
+    line()
+    plus(number: 2)
+    line()
+    minus(number: 1)
+    line()
+    count += 1
+}
+
+func minus(number: Int)
+{
+    angle = 300 - (60 * number)
+    canvas.rotate(by: Degrees(angle))
+}
+
+
+func line()
+{
+    canvas.drawLine(fromX: 0, fromY: 0, toX: length, toY: 0)
+    canvas.translate(byX: length, byY: 0)
+    if count < 3
+    {
+            newWord()
+    }
+}
+
+
+if count < 3
+{
+//    eff()
+}
+count += 1
+line()
+plus(number: 2)
+line()
+plus(number: 2)
+line()
+
+
+
 
 
 /*:
