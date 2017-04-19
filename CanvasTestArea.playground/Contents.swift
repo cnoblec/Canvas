@@ -68,6 +68,7 @@ func minus(number: Int)
 
 func line()
 {
+    count+=1
     canvas.drawLine(fromX: 0, fromY: 0, toX: length, toY: 0)
     canvas.translate(byX: length, byY: 0)
     if count < 3
