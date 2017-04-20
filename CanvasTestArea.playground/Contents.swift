@@ -6,11 +6,11 @@
  
  - callout(Experiment):
  
-    Uncomment line 27 so that the axes of the plane are automatically drawn.
+ Uncomment line 27 so that the axes of the plane are automatically drawn.
  
-    Where is the origin?
+ Where is the origin?
  
-    In what direction do values on the *x* and *y* axes increase?
+ In what direction do values on the *x* and *y* axes increase?
  
  */
 // These are some required statements to make this playground work.
@@ -28,15 +28,13 @@ canvas.drawAxes()
 
 canvas.translate(byX: 0, byY: 200)
 
-
 // Add code below...
 
 let axiom = "F++F++F"
 let rule = "F-F++F-F"
+var printable = ""
 
-var angle = 60
-
-var count = 0
+var angle = 0
 
 var length = 300
 
@@ -46,53 +44,71 @@ func plus(number: Int)
     canvas.rotate(by: Degrees(angle))
 }
 
-func newWord()
-{
-    length /= 3
-    line()
-    minus(number: 1)
-    line()
-    plus(number: 2)
-    line()
-    minus(number: 1)
-    line()
-    count += 1
-}
-
 func minus(number: Int)
 {
-    angle = 300 - (60 * number)
+    angle = 360 - (60 * number)
     canvas.rotate(by: Degrees(angle))
 }
 
 
 func line()
 {
-    count+=1
     canvas.drawLine(fromX: 0, fromY: 0, toX: length, toY: 0)
     canvas.translate(byX: length, byY: 0)
-    if count < 3
+    
+}
+
+func newIt(string: String)
+{
+    printable = ""
+    for i in string.characters
     {
-            newWord()
+        if i == "F"
+        {
+            printable.append(rule)
+        } else if i == "+"{
+            printable.append(i)
+        } else {
+            printable.append(i)
+        }
     }
 }
 
-
-if count < 3
+func drawIt(string: String)
 {
-//    eff()
+    for i in string.characters
+    {
+        if i == "F"
+        {
+            line()
+        } else if i == "+"{
+            plus(number: 1)
+        } else {
+            minus(number: 1)
+        }
+    }
 }
-count += 1
-line()
-plus(number: 2)
-line()
-plus(number: 2)
-line()
 
+func draw(withItterations: Int)
+{
+    
+    var counter = 0
+    
+    printable = axiom
+    
+    while counter < withItterations
+    {
+        length = length / 3
+        newIt(string: printable)
+        counter += 1
+    }
+    
+    drawIt(string: printable)
+}
 
+draw(withItterations: 1)
 
-
-
+printable
 /*:
  
  ## To see output
@@ -106,6 +122,6 @@ line()
  ![timeline-option](timeline-option.png "Show the timeline")
  
  Finally, do not remove the following line of code:
-
+ 
  */
 PlaygroundPage.current.liveView = canvas.imageView
