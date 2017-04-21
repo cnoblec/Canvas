@@ -18,7 +18,7 @@ import Cocoa
 import PlaygroundSupport
 
 // Create a new canvas
-let canvas = Canvas(width: 350, height: 500)
+let canvas = Canvas(width: 300, height: 300)
 
 // View the current state of the canvas
 canvas
@@ -26,42 +26,42 @@ canvas
 // Draw the axes
 canvas.drawAxes()
 
-canvas.translate(byX: 20, byY: 200)
+canvas.translate(byX: 100, byY: 100)
 
 // Add code below...
 
-let axiom = "F++F++F"
-
-let rule = "F-F++F-F"
-
+let axiom = "F"
+let rule = "F-F++F"
 var printable = ""
 
-let reductionFactor = 3
+var angle = 0
 
-let baseAngle = 60
+let baseAngle = 45
 
-var length = 300
+var length = 7
 
-func right()
+func plus(number: Int)
 {
-    canvas.rotate(by: Degrees(baseAngle))
+    angle = baseAngle * number
+    canvas.rotate(by: Degrees(angle))
 }
 
-func left()
+func minus(number: Int)
 {
-    canvas.rotate(by: Degrees(360 - baseAngle))
+    angle = 360 - (baseAngle * number)
+    canvas.rotate(by: Degrees(angle))
 }
 
 func line()
 {
-    canvas.drawLine(fromX: 0, fromY: 0, toX: length, toY: 0)
-    canvas.translate(byX: length, byY: 0)
+    canvas.drawLine(fromX: 0, fromY: length, toX: 0, toY: 0)
+    canvas.translate(byX: 0, byY: length)
     
 }
 
 func skip()
 {
-    canvas.translate(byX: length, byY: 0)
+    canvas.translate(byX: 0, byY: length)
 }
 
 func newIt(string: String)
@@ -88,34 +88,38 @@ func drawIt(string: String)
         {
             line()
         } else if i == "+"{
-            right()
+            plus(number: 1)
         } else if i == "-"{
-            left()
+            minus(number: 1)
         } else if i == "f"{
-            skip()
+            minus(number: 1)
         }
     }
 }
 
-func create(withItterations: Int)
+func draw(withItterations: Int)
 {
     
     var counter = 0
+    
+    let lengthScale = 1
     
     printable = axiom
     
     while counter < withItterations
     {
-        length = length / reductionFactor
+        length = length / lengthScale
         newIt(string: printable)
         counter += 1
     }
-     drawIt(string: printable)
+    
+    drawIt(string: printable)
 }
 
-create(withItterations: 4)
+draw(withItterations: 7)
 
-print(printable)
+canvas.saveState()
+printable
 /*:
  
  ## To see output
