@@ -30,6 +30,19 @@ public enum Quality : Int {
     case Ultra = 4
 }
 
+struct Translation {
+    var x : Int
+    var y : Int
+}
+
+struct Rotation {
+    var amount : Degrees
+}
+
+struct StateChange {
+    var save : Bool // When true, canvas state has been saved, otherwise, canvas state is restored
+}
+
 open class Color {
     
     // FIXME: Need more research into how to properly write a class that handles invalid property geting/setting
@@ -276,6 +289,9 @@ open class Canvas : CustomPlaygroundQuickLookable {
     public var offscreenRepresentation : NSBitmapImageRep {
         return self.offscreenRep
     }
+    
+    // List of canvas transformations performed
+    var transforms : [Any] = []
     
     // Initialization of object based on this class
     public init(width: Int, height: Int, quality : Quality = Quality.Standard) {
@@ -602,6 +618,9 @@ open class Canvas : CustomPlaygroundQuickLookable {
         xform.rotate(byDegrees: provided)
         xform.concat()
         
+        // Save the rotation that's been applied to this canvas
+        let rotation = Rotation(amount: provided)
+        self.transforms.append(rotation)
     }
     
     open func translate(byX: Int, byY: Int) {
@@ -614,14 +633,26 @@ open class Canvas : CustomPlaygroundQuickLookable {
         let xform = NSAffineTransform()
         xform.translateX(by: CGFloat(byX), yBy: CGFloat(byY))
         xform.concat()
+        
+        // Save the transformation that's been applied to this canvas
+        let translation = Translation(x: byX, y: byY)
+        self.transforms.append(translation)
     }
     
     open func saveState() {
         NSGraphicsContext.saveGraphicsState()
+        
+        // Record that the graphics state was saved
+        let stateSaved = StateChange(save: true)
+        self.transforms.append(stateSaved)
     }
     
     open func restoreState() {
         NSGraphicsContext.restoreGraphicsState()
+
+        // Record that the graphics state was restored
+        let stateSaved = StateChange(save: false)
+        self.transforms.append(stateSaved)
     }
     
     open func drawAxes() {

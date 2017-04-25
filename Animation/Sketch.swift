@@ -14,167 +14,47 @@ class Sketch : NSObject {
     //       Therefore, the line immediately below must always be present.
     let canvas : Canvas
     
+    // Declare constants
+    let north = 0
+    let northEast = 1
+    let east = 2
+    let southEast = 3
+    let south = 4
+    let southWest = 5
+    let west = 6
+    let northWest = 7
+    
+    // Set the step size (travel distance per iteration)
+    let stepSize = 5
+    
+    // Set the pixel size
+    let diameter = 7
+    
+    // Generate a starting position
+    var x = 0
+    var y = 0
+    
     // This runs once, equivalent to setup() in Processing
     override init() {
         
         // Create canvas object – specify size
-        canvas = Canvas(width: 300, height: 300)
+        canvas = Canvas(width: 500, height: 300)
         
         // The frame rate can be adjusted; the default is 60 fps
         canvas.framesPerSecond = 1
         
-        canvas.translate(byX: 0, byY: 10)
+        // Translate up to middle of canvas
+        canvas.translate(byX: 0, byY: canvas.height / 2)
         
-    }
-    
-    let axiom = "F++F++F"
-    let rule = "F-F++F-F"
-    var printable = ""
-    
-    var angle = 0
-    
-    var frame = 0
-    
-    let baseAngle = 60
-    
-    var lineCount = 0
-    
-    var length = 50
-    
-    var printed = false
-    
-    func plus()
-    {
-        angle = baseAngle
-        canvas.rotate(by: Degrees(angle))
-    }
-    
-    func minus()
-    {
-        angle = 360 - baseAngle
-        canvas.rotate(by: Degrees(angle))
-    }
-    
-    
-    func line()
-    {
-        canvas.drawLine(fromX: 0, fromY: 0, toX: length, toY: 0)
-        canvas.translate(byX: length, byY: 0)
-        
-    }
-    
-    func skip()
-    {
-        canvas.translate(byX: length, byY: 0)
-    }
-    
-    func newIt(string: String)
-    {
-        printable = ""
-        for i in string.characters
-        {
-            if i == "F"
-            {
-                printable.append(rule)
-                lineCount += 1
-            } else if i == "+"{
-                printable.append(i)
-            } else {
-                printable.append(i)
-            }
-        }
-    }
-    
-    func drawItt(string: String, length: Int)
-    {
-        var c = 0
-        for i in string.characters
-        {
-            if c < length
-            {
-                if i == "F"
-                {
-                    line()
-                } else if i == "+"{
-                    plus()
-                } else if i == "-"{
-                    minus()
-                } else if i == "f"{
-                    skip()
-                }
-                
-                c += 1
-            }
-        }
-    }
-    
-    func drawOne(char: Character) -> Bool
-    {
-        if char == "F"
-        {
-            line()
-            return true
-        } else if char == "+"{
-            plus()
-            return false
-        } else if char == "-"{
-            minus()
-            return false
-        } else if char == "f"{
-            skip()
-            return true
-        }
-        return false
-    }
-    
-    func compile(withItterations: Int)
-    {
-        
-        var counter = 0
-        
-        printable = axiom
-        
-        while counter < withItterations
-        {
-            length = length / 3
-            newIt(string: printable)
-            counter += 1
-        }
-        for i in 0...lineCount
-        {
-            drawItt(string: printable, length: i)
-        }
-        
-        
-    }
-    
-    func createString(withItterations: Int) -> String
-    {
-        var arrayOfString : [Character] = []
-        
-        var counter = 0
-        
-        printable = axiom
-        
-        while counter < withItterations
-        {
-            length = length / 3
-            newIt(string: printable)
-            counter += 1
-        }
-        
-        for i in printable.characters
-        {
-            arrayOfString.append(i)
-        }
-        
-        return printable
     }
     
     // Runs repeatedly, equivalent to draw() in Processing
     func draw() {
-        // call a function to step through the String by F's
-        canvas.translate(byX: 50, byY: 0)
+        
+        // Tranlate to the right a bit each time
+        canvas.translate(byX: 25, byY: 0)
+        
+        // Draw the axes
         canvas.drawAxes()
         
     }
@@ -184,5 +64,5 @@ class Sketch : NSObject {
         
         
     }
-    
+
 }

@@ -34,29 +34,28 @@ let axiom = "F++F++F"
 
 let rule = "F-F++F-F"
 
-var printable = ""
+var word = ""
 
 let reductionFactor = 3
 
-let baseAngle = 60
+let angle = 60
 
 var length = 300
 
 func right()
 {
-    canvas.rotate(by: Degrees(baseAngle))
+    canvas.rotate(by: Degrees(angle))
 }
 
 func left()
 {
-    canvas.rotate(by: Degrees(360 - baseAngle))
+    canvas.rotate(by: Degrees(360 - angle))
 }
 
 func line()
 {
     canvas.drawLine(fromX: 0, fromY: 0, toX: length, toY: 0)
     canvas.translate(byX: length, byY: 0)
-    
 }
 
 func skip()
@@ -66,16 +65,16 @@ func skip()
 
 func newIt(string: String)
 {
-    printable = ""
+    word = ""
     for i in string.characters
     {
         if i == "F"
         {
-            printable.append(rule)
+            word.append(rule)
         } else if i == "+"{
-            printable.append(i)
+            word.append(i)
         } else {
-            printable.append(i)
+            word.append(i)
         }
     }
 }
@@ -102,20 +101,22 @@ func create(withItterations: Int)
     
     var counter = 0
     
-    printable = axiom
+    word = axiom
     
     while counter < withItterations
     {
         length = length / reductionFactor
-        newIt(string: printable)
+        newIt(string: word)
         counter += 1
     }
-     drawIt(string: printable)
+     drawIt(string: word)
 }
 
-create(withItterations: 4)
+//create(withItterations: 4)
 
-print(printable)
+LindenmayerSystem.init(axiom: "F++F++F", rule: "F-F++F-F", word: "", reductionFactor: 3, angle: 60, length: 300, x: 0, y: 0, direction: 0, itterations: 1)
+
+print(word)
 /*:
  
  ## To see output

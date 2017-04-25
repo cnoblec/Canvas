@@ -69,10 +69,41 @@ class ViewController: NSViewController {
         sketch.canvas.frameCount += 1
         
         // Get a Core Graphics representation of the current image on the canvas
-        // and set it to the backing layer of the NSView object tied to the
         var imageRect : NSRect = NSMakeRect(0, 0, CGFloat(sketch.canvas.width), CGFloat(sketch.canvas.height))
+        
+        // Get a new graphics context based on what's happened with the canvas in the last draw() loop
         NSGraphicsContext.setCurrent(NSGraphicsContext(bitmapImageRep: sketch.canvas.offscreenRepresentation))
+        
+        // Update the view (set it to the backing layer of the NSView object tied to the view controller)
         self.view.layer!.contents = sketch.canvas.imageView.image?.cgImage(forProposedRect: &imageRect, context: NSGraphicsContext.current(), hints: nil)
+        
+        // Restore any transformations on the new graphics context so that next draw() loop carries on where it left off
+        for transform in sketch.canvas.transforms {
+            
+            // If this transformation is a rotation, apply it...
+            if let rotation = transform as? Rotation {
+                let xform = NSAffineTransform()
+                xform.rotate(byDegrees: rotation.amount)
+                xform.concat()
+            }
+
+            // If this transformation is a translation, apply it...
+            if let translation = transform as? Translation {
+                let xform = NSAffineTransform()
+                xform.translateX(by: CGFloat(translation.x), yBy: CGFloat(translation.y))
+                xform.concat()
+            }
+            
+            // If this transformation is a state change, apply it...
+            if let stateChange = transform as? StateChange {
+                if stateChange.save {
+                    NSGraphicsContext.saveGraphicsState()
+                } else {
+                    NSGraphicsContext.restoreGraphicsState()
+                }
+            }
+
+        }
         
     }
     
