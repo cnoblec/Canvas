@@ -4,21 +4,21 @@ public class LindenmayerSystem
 {
     // properties
     var axiom : String
-    var rule : String
+    var rules : [String : String]
     var word : String
-    var reductionFactor : Int
+    var reductionFactor : Float
     var direction : Int
     var angle : Int
-    var length : Int
-    var x : Int
-    var y : Int
+    var length : Float
+    var x : Float
+    var y : Float
     var itterations : Int
     
     // initializers
-    public init(axiom: String, rule: String, word: String, reductionFactor: Int, angle: Int, length: Int, x: Int, y: Int, direction: Int, itterations: Int)
+    public init(axiom: String, rules: [String:String], word: String, reductionFactor: Float, angle: Int, length: Float, x: Float, y: Float, direction: Int, itterations: Int)
     {
         self.axiom = axiom
-        self.rule = rule
+        self.rules = rules
         self.word = word
         self.reductionFactor = reductionFactor
         self.angle = angle
@@ -37,12 +37,17 @@ public class LindenmayerSystem
         word = ""
         for i in string.characters
         {
-            if i == "F"
+            
+            for (key, rule) in rules
             {
-                word.append(rule)
-            } else if i == "+"{
-                word.append(i)
-            } else {
+                if i == Character(key)
+                {
+                    word.append(rule)
+                }
+            }
+            
+            if String(i) == "+" || String(i) == "-"
+            {
                 word.append(i)
             }
         }

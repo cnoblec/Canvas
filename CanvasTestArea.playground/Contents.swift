@@ -18,105 +18,111 @@ import Cocoa
 import PlaygroundSupport
 
 // Create a new canvas
-let canvas = Canvas(width: 350, height: 500)
+let canvas = EnhancedCanvas(width: 500, height: 500)
 
 // View the current state of the canvas
 canvas
 
 // Draw the axes
 canvas.drawAxes()
-
-canvas.translate(byX: 20, byY: 200)
-
 // Add code below...
 
-let axiom = "F++F++F"
-
-let rule = "F-F++F-F"
-
-var word = ""
-
-let reductionFactor = 3
-
-let angle = 60
-
-var length = 300
-
-func right()
-{
-    canvas.rotate(by: Degrees(angle))
-}
-
-func left()
-{
-    canvas.rotate(by: Degrees(360 - angle))
-}
-
-func line()
-{
-    canvas.drawLine(fromX: 0, fromY: 0, toX: length, toY: 0)
-    canvas.translate(byX: length, byY: 0)
-}
-
-func skip()
-{
-    canvas.translate(byX: length, byY: 0)
-}
-
-func newIt(string: String)
-{
-    word = ""
-    for i in string.characters
-    {
-        if i == "F"
-        {
-            word.append(rule)
-        } else if i == "+"{
-            word.append(i)
-        } else {
-            word.append(i)
-        }
-    }
-}
-
-func drawIt(string: String)
-{
-    for i in string.characters
-    {
-        if i == "F"
-        {
-            line()
-        } else if i == "+"{
-            right()
-        } else if i == "-"{
-            left()
-        } else if i == "f"{
-            skip()
-        }
-    }
-}
-
-func create(withItterations: Int)
-{
-    
-    var counter = 0
-    
-    word = axiom
-    
-    while counter < withItterations
-    {
-        length = length / reductionFactor
-        newIt(string: word)
-        counter += 1
-    }
-     drawIt(string: word)
-}
-
+//let axiom = "F++F++F"
+//
+//let rule = "F-F++F-F"
+//
+//var word = ""
+//
+//let reductionFactor = 3
+//
+//let angle = 60
+//
+//var length = 300
+//
+//func right()
+//{
+//    canvas.rotate(by: Degrees(angle))
+//}
+//
+//func left()
+//{
+//    canvas.rotate(by: Degrees(360 - angle))
+//}
+//
+//func line()
+//{
+//    canvas.drawLine(fromX: 0, fromY: 0, toX: length, toY: 0)
+//    canvas.translate(byX: length, byY: 0)
+//}
+//
+//func skip()
+//{
+//    canvas.translate(byX: length, byY: 0)
+//}
+//
+//func newIt(string: String)
+//{
+//    word = ""
+//    for i in string.characters
+//    {
+//        if i == "F"
+//        {
+//            word.append(rule)
+//        } else if i == "+"{
+//            word.append(i)
+//        } else {
+//            word.append(i)
+//        }
+//    }
+//}
+//
+//func drawIt(string: String)
+//{
+//    for i in string.characters
+//    {
+//        if i == "F"
+//        {
+//            line()
+//        } else if i == "+"{
+//            right()
+//        } else if i == "-"{
+//            left()
+//        } else if i == "f"{
+//            skip()
+//        }
+//    }
+//}
+//
+//func create(withItterations: Int)
+//{
+//
+//    var counter = 0
+//
+//    word = axiom
+//
+//    while counter < withItterations
+//    {
+//        length = length / reductionFactor
+//        newIt(string: word)
+//        counter += 1
+//    }
+//     drawIt(string: word)
+//}
+//
 //create(withItterations: 4)
 
-LindenmayerSystem.init(axiom: "F++F++F", rule: "F-F++F-F", word: "", reductionFactor: 3, angle: 60, length: 300, x: 0, y: 0, direction: 0, itterations: 1)
 
-print(word)
+let l = LindenmayerSystem.init(axiom: "F++F++F", rules: ["F" : "F++F---f+F","f":"ff"], word: "", reductionFactor: 1.6, angle: 60, length: 100, x: 100, y: 200, direction: 0, itterations: 1)
+let i = LindenmayerSystem.init(axiom: "F++F++F", rules: ["F":"F+F---f++F"], word: "", reductionFactor: 2, angle: 60, length: 100, x: 200, y: 300, direction: 0, itterations: 1)
+
+canvas.drawAxes()
+
+canvas.saveState()
+canvas.render(system: l)
+canvas.restoreState()
+//canvas.render(system: i)
+
+//canvas.render(system: i)
 /*:
  
  ## To see output
